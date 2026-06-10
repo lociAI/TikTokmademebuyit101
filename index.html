@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viral Finds - Hot Dropshipping Products</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .product-card:hover { transform: translateY(-5px); transition: all 0.3s ease; }
+        .modal { display: none; }
+        .modal.active { display: flex; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-indigo-600">ViralFinds.</h1>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="#" class="hover:text-indigo-600">Home</a></li>
+                    <li><a href="#" class="hover:text-indigo-600">Categories</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-indigo-600 text-white py-12 px-4 text-center">
+        <h2 class="text-4xl font-extrabold mb-4">The Next Viral Product is Here</h2>
+        <p class="text-lg opacity-90">Automated dropshipping store powered by Viral Product Mining Bot.</p>
+    </section>
+
+    <!-- Main Storefront -->
+    <main class="max-w-7xl mx-auto px-4 py-12">
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <div class="col-span-full text-center py-12 text-gray-400">Loading viral finds...</div>
+        </div>
+    </main>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-[100] p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+            <div class="bg-indigo-600 p-6 text-white text-center">
+                <h3 class="text-xl font-bold">Secure Checkout</h3>
+                <p class="text-sm opacity-90">Auto-processed as Dropship</p>
+            </div>
+            <form id="checkout-form" class="p-6 space-y-4">
+                <div id="checkout-product-info" class="text-center pb-4">
+                    <p id="modal-product-title" class="font-bold text-gray-700"></p>
+                    <p id="modal-product-price" class="text-indigo-600 text-2xl font-black"></p>
+                </div>
+                <input type="text" required placeholder="Full Name" class="w-full border rounded-lg p-2">
+                <input type="email" required placeholder="Email Address" class="w-full border rounded-lg p-2">
+                <textarea required placeholder="Shipping Address" class="w-full border rounded-lg p-2"></textarea>
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="text" required placeholder="City" class="w-full border rounded-lg p-2">
+                    <input type="text" required placeholder="Zip" class="w-full border rounded-lg p-2">
+                </div>
+                <div class="pt-4 space-y-2">
+                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 transition">
+                        PAY WITH PAYPAL / CARD
+                    </button>
+                    <p class="text-[10px] text-gray-400 text-center uppercase tracking-widest">Difference is kept as profit automatically</p>
+                    <button type="button" onclick="closeModal()" class="w-full text-xs text-gray-400 py-2">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openCheckout(title, price) {
+            document.getElementById('modal-product-title').innerText = title;
+            document.getElementById('modal-product-price').innerText = price;
+            document.getElementById('checkout-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('checkout-modal').classList.remove('active');
+        }
+
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert("SUCCESS: Payment link generated. Once customer pays your RETAIL price, the bot will fulfill the wholesale order on AliExpress.");
+            closeModal();
+        });
+
+        async function loadProducts() {
+            try {
+                const response = await fetch('products.json');
+                const products = await response.json();
+                const grid = document.getElementById('product-grid');
+                grid.innerHTML = products.map(p => `
+                    <div class="product-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col p-4">
+                        <img src="${p.image_url}" class="h-48 w-full object-contain bg-white mb-4">
+                        <h3 class="text-sm font-bold h-10 overflow-hidden mb-2">${p.title}</h3>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-indigo-600 font-black text-xl">${p.retail_price || '$29.99'}</span>
+                            <span class="text-[10px] text-gray-400">Dropship Ready</span>
+                        </div>
+                        <button onclick="openCheckout('${p.title.replace(/'/g, "\\'")}', '${p.retail_price || '$29.99'}')" class="w-full bg-black text-white py-2 rounded-lg font-bold hover:bg-gray-800 transition">BUY NOW</button>
+                    </div>
+                `).join('');
+            } catch (e) {
+                console.error(e);
+                document.getElementById('product-grid').innerHTML = "Store Offline. Run bot to populate.";
+            }
+        }
+        loadProducts();
+    </script>
+</body>
+</html>

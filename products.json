@@ -1,0 +1,38 @@
+[
+    {
+        "asin": "B08JHCVHTY",
+        "title": "Blink Plus Plan (Monthly Auto-Renewal)",
+        "link": "https://www.amazon.com/dp/B08JHCVHTY",
+        "image_url": "https://images-na.ssl-images-amazon.com/images/I/31YHGbJsldL._AC_UL225_SR225,160_.png",
+        "price": "AUD 16.98",
+        "rank": "#1",
+        "source": "Amazon",
+        "aliexpress_url": "https://www.aliexpress.com/wholesale?SearchText=security+camera+cloud+storage",
+        "aliexpress_id": "9999",
+        "retail_price": "$29.99"
+    },
+    {
+        "asin": "B0DCH8VDXF",
+        "title": "Apple EarPods Headphones with USB-C Plug",
+        "link": "https://www.amazon.com/dp/B0DCH8VDXF",
+        "image_url": "https://images-na.ssl-images-amazon.com/images/I/513OSdW4elL._AC_UL225_SR225,160_.jpg",
+        "price": "AUD 25.30",
+        "rank": "#2",
+        "source": "Amazon",
+        "aliexpress_url": "https://www.aliexpress.com/wholesale?SearchText=usb-c+earbuds+original",
+        "aliexpress_id": "8888",
+        "retail_price": "$39.99"
+    },
+    {
+        "asin": "B0GJTFXNRX",
+        "title": "Apple AirTag (2nd Generation)",
+        "link": "https://www.amazon.com/dp/B0GJTFXNRX",
+        "image_url": "https://images-na.ssl-images-amazon.com/images/I/61Qd9Z9caRL._AC_UL225_SR225,160_.jpg",
+        "price": "AUD 38.25",
+        "rank": "#3",
+        "source": "Amazon",
+        "aliexpress_url": "https://www.aliexpress.com/wholesale?SearchText=gps+tracker+tag",
+        "aliexpress_id": "7777",
+        "retail_price": "$59.99"
+    }
+]
