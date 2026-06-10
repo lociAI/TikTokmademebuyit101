@@ -137,7 +137,7 @@
 
         async function loadProducts() {
             try {
-                const response = await fetch('products.json');
+                const response = await fetch('products.json?v=' + new Date().getTime());
                 currentProducts = await response.json();
                 const grid = document.getElementById('product-grid');
                 
