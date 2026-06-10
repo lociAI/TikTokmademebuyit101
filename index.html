@@ -52,6 +52,11 @@
                 <input type="hidden" id="product-title-hidden" name="product_name">
                 <input type="hidden" id="product-ali-url" name="aliexpress_url">
                 
+                <div id="checkout-product-info" class="text-center pb-4 border-b border-gray-100 mb-4">
+                    <p id="modal-product-title" class="font-bold text-gray-700"></p>
+                    <p id="modal-product-price" class="text-indigo-600 text-2xl font-black"></p>
+                </div>
+
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Full Name</label>
                     <input type="text" name="customer_name" required class="w-full border rounded-lg p-2" placeholder="John Doe">
@@ -76,13 +81,20 @@
     </div>
 
     <script>
-        function openCheckout(title, price, id, aliUrl) {
-            document.getElementById('modal-product-title').innerText = title;
-            document.getElementById('modal-product-price').innerText = price;
-            document.getElementById('product-id').value = id;
-            document.getElementById('product-price').value = price;
-            document.getElementById('product-title-hidden').value = title;
-            document.getElementById('product-ali-url').value = aliUrl;
+        let currentProducts = [];
+
+        function openCheckout(index) {
+            const product = currentProducts[index];
+            if (!product) return;
+
+            document.getElementById('modal-product-title').innerText = product.title;
+            document.getElementById('modal-product-price').innerText = product.retail_price || '$29.99';
+            
+            document.getElementById('product-id').value = product.asin || 'N/A';
+            document.getElementById('product-price').value = product.retail_price || '$29.99';
+            document.getElementById('product-title-hidden').value = product.title;
+            document.getElementById('product-ali-url').value = product.aliexpress_url || '#';
+            
             document.getElementById('checkout-modal').classList.add('active');
         }
 
@@ -94,50 +106,65 @@
         form.onsubmit = async (e) => {
             e.preventDefault();
             
-            // 1. Send customer info to your Order Queue (Free via Formspree)
             const formData = new FormData(form);
-            
-            // Construct PayPal URL while we wait for form submission
             const price = document.getElementById('product-price').value.replace('$', '');
             const title = document.getElementById('product-title-hidden').value;
             const paypalEmail = "jtechsoftware101@gmail.com";
             const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${encodeURIComponent(paypalEmail)}&item_name=${encodeURIComponent(title)}&amount=${price}&currency_code=USD`;
 
             try {
+                // Show loading state
+                const btn = form.querySelector('button[type="submit"]');
+                const originalText = btn.innerText;
+                btn.innerText = "Processing...";
+                btn.disabled = true;
+
                 await fetch(form.action, {
                     method: 'POST',
                     body: formData,
                     headers: { 'Accept': 'application/json' }
                 });
                 
-                // 2. Redirect to PayPal for payment
                 window.location.href = paypalUrl;
             } catch (error) {
+                console.error(error);
                 alert("Order connection error. Please check your internet.");
+                const btn = form.querySelector('button[type="submit"]');
+                btn.innerText = "PAY WITH PAYPAL / CARD";
+                btn.disabled = false;
             }
         };
 
         async function loadProducts() {
             try {
                 const response = await fetch('products.json');
-                const products = await response.json();
+                currentProducts = await response.json();
                 const grid = document.getElementById('product-grid');
-                grid.innerHTML = products.map(p => `
+                
+                if (currentProducts.length === 0) {
+                    grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">No products discovered yet. Run the bot!</div>';
+                    return;
+                }
+
+                grid.innerHTML = currentProducts.map((p, index) => `
                     <div class="product-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col p-4">
-                        <img src="${p.image_url}" class="h-48 w-full object-contain bg-white mb-4">
-                        <h3 class="text-sm font-bold h-10 overflow-hidden mb-2">${p.title}</h3>
+                        <div class="h-48 w-full flex items-center justify-center bg-white mb-4">
+                            <img src="${p.image_url}" class="max-h-full max-w-full object-contain" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
+                        </div>
+                        <h3 class="text-sm font-bold h-12 overflow-hidden mb-2 text-gray-800">${p.title}</h3>
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-indigo-600 font-black text-xl">${p.retail_price || '$29.99'}</span>
-                            <span class="text-[10px] text-gray-400">Dropship Ready</span>
+                            <span class="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-1 rounded-full font-bold uppercase">Trending</span>
                         </div>
-                        <button onclick="openCheckout('${p.title.replace(/'/g, "\\'")}', '${p.retail_price || '$29.99'}', '${p.asin}', '${p.aliexpress_url}')" class="w-full bg-black text-white py-2 rounded-lg font-bold hover:bg-gray-800 transition">BUY NOW</button>
+                        <button onclick="openCheckout(${index})" class="w-full bg-black text-white py-3 rounded-lg font-bold hover:bg-gray-800 transition active:scale-95">BUY NOW</button>
                     </div>
                 `).join('');
             } catch (e) {
                 console.error(e);
-                document.getElementById('product-grid').innerHTML = "Store Offline. Run bot to populate.";
+                document.getElementById('product-grid').innerHTML = '<div class="col-span-full text-center text-red-500 py-12">Store Offline. Please ensure products.json is correctly formatted.</div>';
             }
         }
+        
         loadProducts();
     </script>
 </body>
