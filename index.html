@@ -62,7 +62,6 @@
                     <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 transition">
                         PAY WITH PAYPAL / CARD
                     </button>
-                    <p class="text-[10px] text-gray-400 text-center uppercase tracking-widest">Difference is kept as profit automatically</p>
                     <button type="button" onclick="closeModal()" class="w-full text-xs text-gray-400 py-2">Cancel</button>
                 </div>
             </form>
@@ -82,8 +81,15 @@
 
         document.getElementById('checkout-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert("SUCCESS: Payment link generated. Once customer pays your RETAIL price, the bot will fulfill the wholesale order on AliExpress.");
-            closeModal();
+            const price = document.getElementById('modal-product-price').innerText.replace('$', '');
+            const title = document.getElementById('modal-product-title').innerText;
+            const paypalEmail = "jtechsoftware101@gmail.com";
+            
+            // Construct PayPal URL
+            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${encodeURIComponent(paypalEmail)}&item_name=${encodeURIComponent(title)}&amount=${price}&currency_code=USD`;
+            
+            alert("Redirecting to Secure PayPal Checkout...");
+            window.location.href = paypalUrl;
         });
 
         async function loadProducts() {
