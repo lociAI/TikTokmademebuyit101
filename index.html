@@ -3,78 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viral Finds - Hot Dropshipping Products</title>
+    <title>ViralFinds | Curated Tech-Luxury Discovery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        indigo: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed', // Primary
+                            700: '#6d28d9',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
+                        },
+                        slate: {
+                            50: '#f8fafc',
+                            900: '#0f172a',
+                        }
+                    },
+                    animation: {
+                        'float-3d': 'float3d 6s ease-in-out infinite',
+                        'pulse-soft': 'pulseSoft 2s infinite',
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                        'slide-in': 'slideIn 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        float3d: {
+                            '0%, 100%': { transform: 'translateY(0) rotateX(0) rotateY(0)' },
+                            '50%': { transform: 'translateY(-20px) rotateX(10deg) rotateY(10deg)' },
+                        },
+                        pulseSoft: {
+                            '0%, 100%': { opacity: 1 },
+                            '50%': { opacity: 0.7 },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: 0, transform: 'translateY(20px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        },
+                        slideIn: {
+                            '0%': { opacity: 0, transform: 'translateX(-100%)' },
+                            '100%': { opacity: 1, transform: 'translateX(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        .product-card:hover { transform: translateY(-5px); transition: all 0.3s ease; }
+        body { background-color: #f8fafc; }
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
         .modal { display: none; }
         .modal.active { display: flex; }
+        .stock-progress { transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans">
+<body class="text-slate-900 font-sans antialiased">
+
+    <!-- Top Alert Banner -->
+    <div class="bg-indigo-600 text-white py-2 text-center text-xs font-bold tracking-widest uppercase sticky top-0 z-[60]">
+        <span class="inline-flex items-center">
+            <span class="w-2 h-2 bg-red-400 rounded-full mr-2 animate-pulse"></span>
+            🔥 TRENDING NOW: Free Shipping on Orders Over $50
+        </span>
+    </div>
 
     <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-indigo-600">ViralFinds.</h1>
-            <nav>
-                <ul class="flex space-x-6">
-                    <li><a href="#" class="hover:text-indigo-600">Home</a></li>
-                    <li><a href="#" class="hover:text-indigo-600">Categories</a></li>
+    <header class="bg-white/80 backdrop-blur-md sticky top-8 z-50 border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-extrabold tracking-tighter text-indigo-600">ViralFinds<span class="text-slate-900">.</span></h1>
+            <nav class="hidden md:block">
+                <ul class="flex space-x-8 text-sm font-semibold text-slate-600">
+                    <li><a href="#" class="hover:text-indigo-600 transition-colors">Curated Feed</a></li>
+                    <li><a href="#" class="hover:text-indigo-600 transition-colors">Categories</a></li>
+                    <li><a href="#" class="hover:text-indigo-600 transition-colors">About Luxury</a></li>
                 </ul>
             </nav>
+            <div class="flex items-center space-x-4">
+                 <button class="p-2 hover:bg-slate-50 rounded-full transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                 </button>
+                 <button class="bg-slate-900 text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-slate-800 transition-all">Shop Best Sellers</button>
+            </div>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="bg-indigo-600 text-white py-12 px-4 text-center">
-        <h2 class="text-4xl font-extrabold mb-4">The Next Viral Product is Here</h2>
-        <p class="text-lg opacity-90">Automated dropshipping store powered by Viral Product Mining Bot.</p>
+    <section class="relative overflow-hidden pt-20 pb-32 px-6 bg-gradient-to-br from-white via-indigo-50 to-white">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+            <div class="animate-fade-in-up">
+                <span class="inline-block px-3 py-1 bg-indigo-100 text-indigo-600 text-[10px] font-black uppercase tracking-widest rounded-full mb-6">Social Media's Most Wanted</span>
+                <h2 class="text-5xl lg:text-7xl font-extrabold text-slate-900 leading-[1.1] tracking-tight mb-8">
+                    Discover the <span class="text-indigo-600">Viral</span> Future of Tech.
+                </h2>
+                <p class="text-lg text-slate-500 mb-10 max-w-lg leading-relaxed">
+                    A curated selection of social media's most trending products, vetted for quality and designed for the modern lifestyle.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#discover" class="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold text-center shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all">Explore Discovery Grid</a>
+                    <div class="flex items-center space-x-3 px-4">
+                        <div class="flex -space-x-2">
+                            <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?u=1" alt="user">
+                            <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?u=2" alt="user">
+                            <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?u=3" alt="user">
+                        </div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Joined by 12k+ Gen-Z</span>
+                    </div>
+                </div>
+            </div>
+            <div class="relative hidden lg:block animate-float-3d">
+                <div class="absolute inset-0 bg-indigo-200 blur-3xl opacity-20 rounded-full"></div>
+                <!-- Stylized 3D-ish placeholder -->
+                <div class="relative bg-white p-12 rounded-[3rem] shadow-2xl border border-slate-100">
+                    <div class="w-full aspect-square bg-slate-50 rounded-2xl flex items-center justify-center overflow-hidden">
+                        <img src="images/needoh.jpg" class="w-4/5 h-4/5 object-contain" alt="Featured Product">
+                    </div>
+                    <div class="mt-8 flex justify-between items-center">
+                        <div>
+                            <p class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Trending Now</p>
+                            <p class="text-xl font-extrabold text-slate-900 mt-1">Sensory Nice Cube</p>
+                        </div>
+                        <div class="bg-slate-900 text-white p-4 rounded-2xl">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                             </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Main Storefront -->
-    <main class="max-w-7xl mx-auto px-4 py-12">
+    <main id="discover" class="max-w-7xl mx-auto px-6 py-24">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h3 class="text-3xl font-black text-slate-900 tracking-tight">Trending Discovery Grid</h3>
+                <p class="text-slate-400 font-medium mt-2">Vetted by 10k+ social interactions.</p>
+            </div>
+            <div class="hidden sm:flex space-x-2">
+                <button class="p-3 bg-white border border-slate-100 rounded-xl hover:bg-slate-50 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button class="p-3 bg-white border border-slate-100 rounded-xl hover:bg-slate-50 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
         <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <div class="col-span-full text-center py-12 text-gray-400">Loading viral finds...</div>
+            <div class="col-span-full text-center py-12 text-slate-400 font-medium animate-pulse">Scanning the matrix for viral finds...</div>
         </div>
     </main>
 
-    <!-- Checkout Modal -->
-    <div id="checkout-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-[100] p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
-            <div class="bg-indigo-600 p-6 text-white text-center">
-                <h3 class="text-xl font-bold">Secure Checkout</h3>
-                <p class="text-sm opacity-90">Auto-processed as Dropship</p>
+    <!-- Social Proof Toast -->
+    <div id="toast" class="fixed bottom-6 left-6 z-[100] transform translate-y-20 opacity-0 transition-all duration-500">
+        <div class="glass p-4 rounded-2xl shadow-xl flex items-center space-x-4 max-w-sm border border-white">
+            <div class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-lg" id="toast-initial">S</div>
+            <div>
+                <p class="text-xs font-black text-slate-900" id="toast-message">Sarah from New York</p>
+                <p class="text-[10px] text-slate-400 mt-0.5">Just purchased <span class="font-bold text-indigo-600" id="toast-product">Blink Plus Plan</span></p>
+                <p class="text-[9px] text-slate-300 mt-1 uppercase font-bold tracking-widest">Verified Purchase</p>
             </div>
-            <form id="checkout-form" class="p-6 space-y-4" action="https://formspree.io/f/mqakvweb" method="POST">
+        </div>
+    </div>
+
+    <!-- Premium Checkout Modal -->
+    <div id="checkout-modal" class="modal fixed inset-0 bg-slate-900/40 backdrop-blur-sm items-center justify-center z-[100] p-4">
+        <div class="bg-white rounded-[2.5rem] shadow-2xl max-w-lg w-full overflow-hidden animate-fade-in-up">
+            <!-- Modal Header / Progress -->
+            <div class="p-8 pb-4">
+                <div class="flex justify-between items-center mb-8">
+                    <button onclick="closeModal()" class="text-slate-400 hover:text-slate-900">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 rounded-full bg-indigo-600"></div>
+                        <div class="w-2 h-2 rounded-full bg-slate-200"></div>
+                        <div class="w-2 h-2 rounded-full bg-slate-200"></div>
+                    </div>
+                    <div class="text-[10px] font-black uppercase text-indigo-600 tracking-widest">Step 1 of 3</div>
+                </div>
+                
+                <h3 class="text-2xl font-black text-slate-900 mb-2">Complete Order</h3>
+                <p class="text-sm text-slate-400 font-medium">Verify your details for secure priority shipping.</p>
+            </div>
+
+            <form id="checkout-form" class="p-8 pt-4 space-y-6" action="https://formspree.io/f/mqakvweb" method="POST">
                 <input type="hidden" id="product-id" name="asin">
                 <input type="hidden" id="product-price" name="price">
                 <input type="hidden" id="product-title-hidden" name="product_name">
                 <input type="hidden" id="product-ali-url" name="aliexpress_url">
                 
-                <div id="checkout-product-info" class="text-center pb-4 border-b border-gray-100 mb-4">
-                    <p id="modal-product-title" class="font-bold text-gray-700"></p>
-                    <p id="modal-product-price" class="text-indigo-600 text-2xl font-black"></p>
+                <div id="checkout-product-info" class="flex items-center space-x-4 p-4 bg-slate-50 rounded-2xl mb-4 border border-slate-100">
+                    <div class="w-16 h-16 bg-white rounded-xl flex-shrink-0 flex items-center justify-center p-2">
+                        <img id="modal-product-img" src="" class="max-h-full max-w-full object-contain" alt="">
+                    </div>
+                    <div class="flex-grow min-w-0">
+                        <p id="modal-product-title" class="font-bold text-slate-900 text-sm truncate"></p>
+                        <p id="modal-product-price" class="text-indigo-600 text-lg font-black"></p>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Full Name</label>
-                    <input type="text" name="customer_name" required class="w-full border rounded-lg p-2" placeholder="John Doe">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email Address</label>
-                    <input type="email" name="customer_email" required class="w-full border rounded-lg p-2" placeholder="john@example.com">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Shipping Address</label>
-                    <textarea name="address" required class="w-full border rounded-lg p-2" placeholder="123 Street, City, Zip, Country"></textarea>
+                <div class="space-y-4">
+                    <div class="relative">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase mb-2 tracking-widest ml-1">Full Name</label>
+                        <input type="text" name="customer_name" required class="w-full bg-slate-50 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-indigo-600 transition-all" placeholder="John Doe">
+                    </div>
+                    <div class="relative">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase mb-2 tracking-widest ml-1">Email Address</label>
+                        <input type="email" name="customer_email" required class="w-full bg-slate-50 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-indigo-600 transition-all" placeholder="john@example.com">
+                    </div>
+                    <div class="relative">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase mb-2 tracking-widest ml-1">Shipping Address</label>
+                        <textarea name="address" required class="w-full bg-slate-50 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-indigo-600 transition-all h-24" placeholder="123 Street, City, Zip, Country"></textarea>
+                    </div>
                 </div>
                 
-                <div class="pt-4 space-y-2">
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 transition">
-                        PAY WITH PAYPAL / CARD
+                <div class="pt-4 space-y-4">
+                    <button type="submit" class="w-full bg-indigo-600 text-white font-black py-5 rounded-2xl hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-200 active:scale-[0.98]">
+                        PROCEED TO PAYMENT
                     </button>
-                    <button type="button" onclick="closeModal()" class="w-full text-xs text-gray-400 py-2">Cancel</button>
+                    <div class="flex justify-center items-center space-x-4 opacity-40">
+                         <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" class="h-4" alt="PayPal">
+                         <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" class="h-3" alt="Visa">
+                         <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" class="h-4" alt="Mastercard">
+                         <div class="h-4 w-[1px] bg-slate-300"></div>
+                         <div class="flex items-center text-[10px] font-bold">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            SECURE
+                         </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -89,6 +278,7 @@
 
             document.getElementById('modal-product-title').innerText = product.title;
             document.getElementById('modal-product-price').innerText = product.retail_price || '$29.99';
+            document.getElementById('modal-product-img').src = product.image_url;
             
             document.getElementById('product-id').value = product.asin || 'N/A';
             document.getElementById('product-price').value = product.retail_price || '$29.99';
@@ -96,10 +286,12 @@
             document.getElementById('product-ali-url').value = product.aliexpress_url || '#';
             
             document.getElementById('checkout-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
             document.getElementById('checkout-modal').classList.remove('active');
+            document.body.style.overflow = '';
         }
 
         const form = document.getElementById('checkout-form');
@@ -113,10 +305,9 @@
             const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${encodeURIComponent(paypalEmail)}&item_name=${encodeURIComponent(title)}&amount=${price}&currency_code=USD`;
 
             try {
-                // Show loading state
                 const btn = form.querySelector('button[type="submit"]');
                 const originalText = btn.innerText;
-                btn.innerText = "Processing...";
+                btn.innerText = "REDIRECTING TO SECURE PAY...";
                 btn.disabled = true;
 
                 await fetch(form.action, {
@@ -128,12 +319,36 @@
                 window.location.href = paypalUrl;
             } catch (error) {
                 console.error(error);
-                alert("Order connection error. Please check your internet.");
+                alert("Security handshake failed. Check connection.");
                 const btn = form.querySelector('button[type="submit"]');
-                btn.innerText = "PAY WITH PAYPAL / CARD";
+                btn.innerText = "PROCEED TO PAYMENT";
                 btn.disabled = false;
             }
         };
+
+        const firstNames = ["Sarah", "James", "Emma", "Liam", "Olivia", "Noah", "Sophia", "Lucas", "Mia", "Ethan"];
+        const cities = ["New York", "London", "Los Angeles", "Sydney", "Paris", "Berlin", "Tokyo", "Toronto", "Dubai", "Singapore"];
+
+        function showToast() {
+            if (currentProducts.length === 0) return;
+            
+            const name = firstNames[Math.floor(Math.random() * firstNames.length)];
+            const city = cities[Math.floor(Math.random() * cities.length)];
+            const product = currentProducts[Math.floor(Math.random() * currentProducts.length)];
+            
+            document.getElementById('toast-initial').innerText = name[0];
+            document.getElementById('toast-message').innerText = `${name} from ${city}`;
+            document.getElementById('toast-product').innerText = product.title;
+            
+            const toast = document.getElementById('toast');
+            toast.style.transform = 'translateY(0)';
+            toast.style.opacity = '1';
+            
+            setTimeout(() => {
+                toast.style.transform = 'translateY(20px)';
+                toast.style.opacity = '0';
+            }, 5000);
+        }
 
         async function loadProducts() {
             try {
@@ -142,26 +357,70 @@
                 const grid = document.getElementById('product-grid');
                 
                 if (currentProducts.length === 0) {
-                    grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">No products discovered yet. Run the bot!</div>';
+                    grid.innerHTML = '<div class="col-span-full text-center text-slate-400 py-12">No viral products detected. The bot is hunting...</div>';
                     return;
                 }
 
-                grid.innerHTML = currentProducts.map((p, index) => `
-                    <div class="product-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col p-4">
-                        <div class="h-48 w-full flex items-center justify-center bg-white mb-4">
-                            <img src="${p.image_url}" class="max-h-full max-w-full object-contain" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
+                grid.innerHTML = currentProducts.map((p, index) => {
+                    const stock = Math.floor(Math.random() * 15) + 3;
+                    const stockPercent = (stock / 20) * 100;
+                    
+                    return `
+                    <div class="product-card glass rounded-[2rem] p-6 flex flex-col transition-all duration-500 animate-fade-in-up" style="animation-delay: ${index * 100}ms">
+                        <div class="relative h-64 w-full flex items-center justify-center bg-white rounded-3xl mb-6 overflow-hidden border border-slate-50 group">
+                            <img src="${p.image_url}" class="max-h-[80%] max-w-[80%] object-contain group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://via.placeholder.com/300?text=Viral+Find'">
+                            <div class="absolute top-4 right-4 flex flex-col space-y-2">
+                                <span class="bg-indigo-600 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">Bestseller</span>
+                            </div>
                         </div>
-                        <h3 class="text-sm font-bold h-12 overflow-hidden mb-2 text-gray-800">${p.title}</h3>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-indigo-600 font-black text-xl">${p.retail_price || '$29.99'}</span>
-                            <span class="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-1 rounded-full font-bold uppercase">Trending</span>
+                        
+                        <div class="flex-grow flex flex-col">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-sm font-black text-slate-900 leading-tight h-10 overflow-hidden line-clamp-2">${p.title}</h3>
+                            </div>
+                            
+                            <div class="flex items-center space-x-1 mb-4">
+                                <div class="flex text-yellow-400">
+                                    ${[1,2,3,4,5].map(() => `
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                    `).join('')}
+                                </div>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">(5.0)</span>
+                            </div>
+
+                            <div class="mb-6">
+                                <div class="flex justify-between text-[10px] font-black text-red-500 uppercase tracking-widest mb-1.5">
+                                    <span>Limited Stock Left</span>
+                                    <span>Only ${stock} Units</span>
+                                </div>
+                                <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="stock-progress h-full bg-red-500 rounded-full" style="width: ${stockPercent}%"></div>
+                                </div>
+                            </div>
+
+                            <div class="mt-auto flex items-center justify-between">
+                                <div class="flex flex-col">
+                                    <span class="text-xs text-slate-300 line-through font-bold">${p.retail_price ? '$' + (parseFloat(p.retail_price.replace('$','')) * 1.5).toFixed(2) : '$49.99'}</span>
+                                    <span class="text-2xl font-black text-indigo-600 tracking-tighter">${p.retail_price || '$29.99'}</span>
+                                </div>
+                                <button onclick="openCheckout(${index})" class="bg-slate-900 text-white p-4 rounded-2xl hover:bg-indigo-600 transition-all active:scale-90 group shadow-lg shadow-slate-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <button onclick="openCheckout(${index})" class="w-full bg-black text-white py-3 rounded-lg font-bold hover:bg-gray-800 transition active:scale-95">BUY NOW</button>
                     </div>
-                `).join('');
+                    `;
+                }).join('');
+
+                // Start social proof after products load
+                setInterval(showToast, 8000 + Math.random() * 5000);
             } catch (e) {
                 console.error(e);
-                document.getElementById('product-grid').innerHTML = '<div class="col-span-full text-center text-red-500 py-12">Store Offline. Please ensure products.json is correctly formatted.</div>';
+                document.getElementById('product-grid').innerHTML = '<div class="col-span-full text-center text-red-500 py-12">Grid Disconnected. System re-sync required.</div>';
             }
         }
         
