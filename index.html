@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TikTokMadeMeBuyIt101 | Curated Tech-Luxury Discovery</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -251,9 +252,7 @@
                 </div>
                 
                 <div class="pt-4 space-y-4">
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-black py-5 rounded-2xl hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-200 active:scale-[0.98]">
-                        PROCEED TO PAYMENT
-                    </button>
+                    <div id="paypal-button-container" class="w-full z-10 relative"></div>
                     <div class="flex justify-center items-center space-x-4 opacity-40">
                          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" class="h-4" alt="PayPal">
                          <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" class="h-3" alt="Visa">
@@ -289,6 +288,7 @@
             
             document.getElementById('checkout-modal').classList.add('active');
             document.body.style.overflow = 'hidden';
+            initPayPalButtons(product);
         }
 
         function closeModal() {
@@ -297,36 +297,69 @@
         }
 
         const form = document.getElementById('checkout-form');
-        form.onsubmit = async (e) => {
-            e.preventDefault();
-            
-            const formData = new FormData(form);
-            const price = document.getElementById('product-price').value.replace('$', '');
-            const title = document.getElementById('product-title-hidden').value;
-            const paypalEmail = "jtechsoftware101@gmail.com";
-            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${encodeURIComponent(paypalEmail)}&item_name=${encodeURIComponent(title)}&amount=${price}&currency_code=USD`;
+        let paypalButtons = null;
 
-            try {
-                const btn = form.querySelector('button[type="submit"]');
-                const originalText = btn.innerText;
-                btn.innerText = "REDIRECTING TO SECURE PAY...";
-                btn.disabled = true;
-
-                await fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'Accept': 'application/json' }
-                });
-                
-                window.location.href = paypalUrl;
-            } catch (error) {
-                console.error(error);
-                alert("Security handshake failed. Check connection.");
-                const btn = form.querySelector('button[type="submit"]');
-                btn.innerText = "PROCEED TO PAYMENT";
-                btn.disabled = false;
+        function initPayPalButtons(product) {
+            if (paypalButtons) {
+                paypalButtons.close();
             }
-        };
+            
+            const price = parseFloat(product.retail_price.replace('$', ''));
+            
+            paypalButtons = paypal.Buttons({
+                style: {
+                    layout: 'vertical',
+                    shape: 'pill',
+                    label: 'paypal'
+                },
+                createOrder: function(data, actions) {
+                    if (!form.reportValidity()) {
+                        alert("Please fill out your shipping information first!");
+                        return actions.reject();
+                    }
+                    
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: price.toFixed(2)
+                            },
+                            description: product.title
+                        }]
+                    });
+                },
+                onApprove: async function(data, actions) {
+                    return actions.order.capture().then(async function(details) {
+                        const formData = new FormData(form);
+                        formData.append('paypal_transaction_id', details.id);
+                        formData.append('paypal_payer_email', details.payer.email_address);
+                        formData.append('status', 'PAID');
+
+                        // Show loading state
+                        const paypalContainer = document.getElementById('paypal-button-container');
+                        paypalContainer.innerHTML = '<div class="text-center text-indigo-600 font-bold py-4">Securing order details...</div>';
+
+                        try {
+                            await fetch(form.action, {
+                                method: 'POST',
+                                body: formData,
+                                headers: { 'Accept': 'application/json' }
+                            });
+                            alert('Payment Successful! Your order has been placed.');
+                            closeModal();
+                            form.reset();
+                        } catch (err) {
+                            console.error(err);
+                            alert('Payment was captured, but there was an error saving the order details. Please contact support with Transaction ID: ' + details.id);
+                        } finally {
+                            paypalContainer.innerHTML = '';
+                            initPayPalButtons(product);
+                        }
+                    });
+                }
+            });
+            
+            paypalButtons.render('#paypal-button-container');
+        }
 
         const firstNames = ["Sarah", "James", "Emma", "Liam", "Olivia", "Noah", "Sophia", "Lucas", "Mia", "Ethan"];
         const cities = ["New York", "London", "Los Angeles", "Sydney", "Paris", "Berlin", "Tokyo", "Toronto", "Dubai", "Singapore"];
