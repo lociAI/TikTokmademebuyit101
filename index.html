@@ -363,11 +363,18 @@
 
         const firstNames = ["Sarah", "James", "Emma", "Liam", "Olivia", "Noah", "Sophia", "Lucas", "Mia", "Ethan"];
         const cities = ["New York", "London", "Los Angeles", "Sydney", "Paris", "Berlin", "Tokyo", "Toronto", "Dubai", "Singapore"];
+        let lastDisplayedName = "";
 
         function showToast() {
             if (currentProducts.length === 0) return;
             
-            const name = firstNames[Math.floor(Math.random() * firstNames.length)];
+            let name;
+            do {
+                name = firstNames[Math.floor(Math.random() * firstNames.length)];
+            } while (name === lastDisplayedName && firstNames.length > 1);
+            
+            lastDisplayedName = name;
+            
             const city = cities[Math.floor(Math.random() * cities.length)];
             const product = currentProducts[Math.floor(Math.random() * currentProducts.length)];
             
